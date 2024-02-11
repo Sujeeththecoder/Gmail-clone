@@ -10,7 +10,6 @@ const dialogstyle ={
     maxHeight: '100%',
     boxShadow: 'none',
     borderRadius: '10px 10px 0 0'
-
 } 
 const Header = styled(Box)({
     display: 'flex',
@@ -20,22 +19,17 @@ const Header = styled(Box)({
     '& > p': {
         fontSize: 14,
         fontWeight: 600,
-        
-        
     }
 });
-
 const RecipientsWrapper = styled(Box)({
     display: 'flex',
     flexDirection: 'column',
-    
     padding: '0 15px',
     ' & > div': {
         fontSize: 14,
         borderBottom: '1px solid #F5F5F5',
         marginTop: '10px'
     }
-    
 });
 const Footer = styled(Box)({
     display: 'flex',
@@ -55,13 +49,10 @@ const ComposeMail= ({openDialog, setOpenDialog}) => {
     const [data, setData] = useState({});
     const sentEmailService = useApi(API_URLS.saveSentEmail);
     const config = {
-        
             Host : "smtp.elasticemail.com",
             Username : "process.env.REACT_APP_USERNAME",
             Password : "process.env.REACT_APP_PASSWORD",
             Port: 2525,
-            
-        
     }
     const closeComposeMail = (e) => {
     //    e.preventDefault();
