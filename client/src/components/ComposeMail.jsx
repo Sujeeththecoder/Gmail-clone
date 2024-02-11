@@ -10,6 +10,7 @@ const dialogstyle ={
     maxHeight: '100%',
     boxShadow: 'none',
     borderRadius: '10px 10px 0 0'
+
 } 
 const Header = styled(Box)({
     display: 'flex',
