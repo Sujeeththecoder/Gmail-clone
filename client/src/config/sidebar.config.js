@@ -7,7 +7,7 @@ export const sidebar_data = [
         name: 'inbox',
         title: 'Inbox',
         icon: Photo,
-        
+
     },
     {
         name: 'starred',

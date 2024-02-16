@@ -1,18 +1,30 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
-const Main = () => {
-    const [openDrawer, setOpenDrawer] = useState(true);
-    const toggleDrawer = () => {
-        setOpenDrawer(prevState => !prevState);
-    }
-return (
-<div>
+import { Outlet } from "react-router-dom";
+import SuspenseLoader from "../components/common/SuspenseLoader";
+import { Box } from "@mui/material";
+import Emails from "../components/Emails";
 
-<Header toggleDrawer={toggleDrawer} />
-<SideBar openDrawer={openDrawer} />
-<div>Display mails</div>
-</div>
-)
-}
+const Main = () => {
+  const [openDrawer, setOpenDrawer] = useState(true);
+
+  const toggleDrawer = () => {
+    setOpenDrawer((prevState) => !prevState);
+  };
+
+  return (
+    <>
+      <Header toggleDrawer={toggleDrawer} />
+      <Box>
+        <SideBar openDrawer={openDrawer} />
+        <Suspense fallback={<SuspenseLoader />}>
+          <Outlet context={{openDrawer}}/>
+          <Emails openDrawer={openDrawer} />
+        </Suspense>
+      </Box>
+    </>
+  );
+};
+
 export default Main;
