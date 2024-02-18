@@ -10,7 +10,7 @@ const dialogstyle ={
     maxHeight: '100%',
     boxShadow: 'none',
     borderRadius: '10px 10px 0 0'
-} 
+}
 const Header = styled(Box)({
     display: 'flex',
     justifyContent:'space-between',
@@ -48,6 +48,7 @@ const SendButton = styled(Button)({
 const ComposeMail= ({openDialog, setOpenDialog}) => {
     const [data, setData] = useState({});
     const sentEmailService = useApi(API_URLS.saveSentEmail);
+    const saveDraftService = useApi(API_URLS.saveDraftsEmails);
     const config = {
             Host : "smtp.elasticemail.com",
             Username : "process.env.REACT_APP_USERNAME",
@@ -55,8 +56,28 @@ const ComposeMail= ({openDialog, setOpenDialog}) => {
             Port: 2525,
     }
     const closeComposeMail = (e) => {
-    //    e.preventDefault();
-       setOpenDialog(false); 
+        e.preventDefault();
+
+        const payload = {
+            to : data.to,
+            from : "codeforinterview03@gmail.com",
+            subject : data.subject,
+            body : data.body,
+            date: new Date(),
+            image: '',
+            name: 'Code for Interview',
+            starred: false,
+            type: 'drafts'
+        }
+
+        saveDraftService.call(payload);
+
+        if (!saveDraftService.error) {
+            setOpenDialog(false);
+            setData({});
+        } else {
+
+        }
     }
     const sendMail =(e) => {
         if (window.Email) {
@@ -70,7 +91,7 @@ const ComposeMail= ({openDialog, setOpenDialog}) => {
                message => alert(message)
              );
         }
-         
+
         const payload = {
             to: 'them@website.com',
             from: 'you@isp.com',
@@ -80,9 +101,10 @@ const ComposeMail= ({openDialog, setOpenDialog}) => {
             image: '',
             name: 'code for interview',
             starred: false,
-            type: 'sent'
-            
+            type: 'drafts '
+
         }
+        saveDraftService.call(payload);
         sentEmailService.call(payload);
         if (!sentEmailService.error){
             setOpenDialog(false);
@@ -100,7 +122,7 @@ const ComposeMail= ({openDialog, setOpenDialog}) => {
         open = {openDialog} PaperProps={{ sx: dialogstyle}}> 
             <Header>
            <Typography> New Message </Typography>
-           <Close fontSize='small' onClick = {(e) => closeComposeMail()}/>
+           <Close fontSize='small' onClick = {(e) => closeComposeMail(e)}/>
             </Header>
             <RecipientsWrapper>
                 <InputBase placeholder="recipients" name="to" onChange={(e) => onValueChange(e)}/>
@@ -122,3 +144,7 @@ const ComposeMail= ({openDialog, setOpenDialog}) => {
     );
 };
 export default ComposeMail;
+
+
+
+
