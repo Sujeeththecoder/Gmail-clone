@@ -1,62 +1,83 @@
-import { Box, Typography, Checkbox, styled } from "@mui/material";
-import { StarBorder, Star } from "@mui/icons-material";
-import { useNavigate } from 'react-router-dom';
+
+
+import { ListItem, Checkbox, Typography, Box, styled } from "@mui/material";
+import { StarBorder, Star } from '@mui/icons-material';
+import useApi from '../hooks/useApi';
+import { API_URLS } from "../services/api.urls";
+import { useNavigate } from "react-router-dom";
 import { routes } from "../routes/routes";
 
-const Wrapper = styled(Box)({
-  padding: "0 0 0 10px",
-  background: "#f2f6fc",
-  display: "flex",
-  alignItems: "center",
-  cursor: "pointer",
-  "& > div": {
-    display: "flex",
-    width: "100%",
-    "& > P": {
-      fontSize: 14,
-    },
-  },
-});
-const Indicator = styled(Typography)({
-  fontSize: "12px !important",
-  background: "#ddd",
-  color: "#222",
-  padding: "0 4px",
-  borderRadius: "4px",
-  marginRight: "6px",
-});
-const Date = styled(Typography)({
-  marginLeft: "auto",
-  marginRight: 20,
-  fontSize: 10,
-  color: "#5F6368",
-});
+const Wrapper = styled(ListItem)`
+    padding: 0 0 0 10px;
+    background: #f2f6fc;
+    cursor: pointer;
+    & > div {
+        display: flex;
+        width: 100%
+    }
+    & > div > p {
+        font-size: 14px;
+    }
+`;
 
-const Email = ({ email, selectedEmails }) => {
-  const navigate = useNavigate();
-  return (
-    <Wrapper>
-      <Checkbox size="small"
-       checked={selectedEmails.includes(email._id)} />
-      <StarBorder fontSize="small" style={{ marginRight: 10 }} />
-      <Box onClick = {() => navigate(routes.view.path)}>
-        <Typography style={{ width: 200, overflow: "hidden" }}>
-          {email.name}
-        </Typography>
-        <Indicator>Inbox</Indicator>
-        <Typography>{email.subject}</Typography>
-        <Typography>
-          {email.subject}
-          {email.body && "-"} {email.body}{" "}
-        </Typography>
-        <Date>
-          {new window.Date(email.date).getDate()}
-          {new window.Date(email.date).toLocaleString("default", {
-            month: "long",
-          })}
-        </Date>
-      </Box>
-    </Wrapper>
-  );
-};
+const Indicator = styled(Typography)`
+    font-size: 12px !important;
+    background: #ddd;
+    color: #222;
+    border-radius: 4px;
+    margin-right: 6px;
+    padding: 0 4px;
+`;
+
+const Date = styled(Typography)({
+    marginLeft: 'auto',
+    marginRight: 20,
+    fontSize: 12,
+    color: '#5F6368'
+})
+
+const Email = ({ email, setStarredEmail, selectedEmails, setSelectedEmails }) => {
+    const toggleStarredEmailService = useApi(API_URLS.toggleStarredEmail);
+    
+    const navigate = useNavigate();
+
+    const toggleStarredEmail = () => {
+        toggleStarredEmailService.call({ id: email._id, value: !email.starred });
+        setStarredEmail(prevState => !prevState);
+    }
+
+    const handleChange = () => {
+        if (selectedEmails.includes(email._id)) {
+            setSelectedEmails(prevState => prevState.filter(id => id !== email._id));
+        } else {
+            setSelectedEmails(prevState => [...prevState, email._id]);
+        }
+    }
+
+    return (
+        <Wrapper>
+            <Checkbox 
+                size="small" 
+                checked={selectedEmails.includes(email._id)}
+                onChange={() => handleChange()}
+            />
+            { 
+                email.starred ? 
+                    <Star fontSize="small" style={{ marginRight: 10, color: '#FFF200'}} onClick={() => toggleStarredEmail()} />
+                : 
+                    <StarBorder fontSize="small" style={{ marginRight: 10 }} onClick={() => toggleStarredEmail()} /> 
+            }
+            <Box onClick={() => navigate(routes.view.path, { state: { email: email }})}>
+                <Typography style={{ width: 200 }}>To:{email.to.split('@')[0]}</Typography>
+                <Indicator>Inbox</Indicator>
+                <Typography>{email.subject} {email.body && '-'} {email.body}</Typography>
+                <Date>
+                    {(new window.Date(email.date)).getDate()}&nbsp;
+                    {(new window.Date(email.date)).toLocaleString('default', { month: 'long' })}
+                </Date>
+            </Box>
+        </Wrapper>
+    )
+}
+
 export default Email;
