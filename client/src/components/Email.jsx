@@ -37,7 +37,7 @@ const Date = styled(Typography)({
 })
 
 const Email = ({ email, setStarredEmail, selectedEmails, setSelectedEmails }) => {
-    const toggleStarredEmailService = useApi(API_URLS.toggleStarredEmail);
+    const toggleStarredEmailService = useApi(API_URLS.toggleStarredMails);
     
     const navigate = useNavigate();
 
@@ -59,11 +59,11 @@ const Email = ({ email, setStarredEmail, selectedEmails, setSelectedEmails }) =>
             <Checkbox 
                 size="small" 
                 checked={selectedEmails.includes(email._id)}
-                onChange={() => handleChange()}
+                onChange={() => handleChange()} 
             />
             { 
                 email.starred ? 
-                    <Star fontSize="small" style={{ marginRight: 10, color: '#FFF200'}} onClick={() => toggleStarredEmail()} />
+                    <Star fontSize="small" style={{ marginRight: 10 }} onClick={() => toggleStarredEmail()} />
                 : 
                     <StarBorder fontSize="small" style={{ marginRight: 10 }} onClick={() => toggleStarredEmail()} /> 
             }

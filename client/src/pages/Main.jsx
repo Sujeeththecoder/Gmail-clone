@@ -3,8 +3,10 @@ import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import { Outlet } from "react-router-dom";
 import SuspenseLoader from "../components/common/SuspenseLoader";
-import { Box } from "@mui/material";
-
+import { Box,styled } from "@mui/material";
+const Wrapper = styled(Box)`
+    display: flex;
+`;
 
 const Main = () => {
   const [openDrawer, setOpenDrawer] = useState(true);
@@ -16,12 +18,12 @@ const Main = () => {
   return (
     <>
       <Header toggleDrawer={toggleDrawer} />
-      <Box>
+      <Wrapper>
         <SideBar openDrawer={openDrawer} />
         <Suspense fallback={<SuspenseLoader />}>
           <Outlet context={{openDrawer}}/>
         </Suspense>
-      </Box>
+      </Wrapper>
     </>
   );
 };

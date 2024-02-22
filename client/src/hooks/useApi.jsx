@@ -1,6 +1,5 @@
 import { useState } from "react";
 import API from "../services/api";
-import { API_URLS } from "../services/api.urls";
 const useApi = (urlObject) => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState("");

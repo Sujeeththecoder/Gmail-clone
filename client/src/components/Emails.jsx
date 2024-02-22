@@ -7,7 +7,6 @@ import Email from './Email';
 import { DeleteOutline } from '@mui/icons-material';
 import NoMails from './common/NoMails';
 import { EMPTY_TABS } from '../constants/constants';
-// import { EMPTY_TABS } from '../../constants/constants';
 
 const Emails = () => {
     const [starredEmail, setStarredEmail] = useState(false);
@@ -39,6 +38,7 @@ const Emails = () => {
         } else {
             moveEmailsToBin.call(selectedEmails);
         }
+        // setRefreshScreen(prevState => !prevState);
         setStarredEmail(prevState => !prevState);
     }
 

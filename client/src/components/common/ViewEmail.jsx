@@ -4,7 +4,8 @@ import { Box, Typography, styled } from '@mui/material';
 import { useOutletContext, useLocation } from 'react-router-dom';
 import { emptyProfilePic } from '../../constants/constants';
 import { ArrowBack, Delete } from '@mui/icons-material';
-
+import useApi from '../../hooks/useApi';
+import { API_URLS } from '../../services/api.urls';
 const IconWrapper = styled(Box)({
     padding: 15
 });
@@ -57,12 +58,16 @@ const ViewEmail = () => {
     
     const { state } = useLocation();
     const { email } = state;
-
+    const moveEmailsToBin = useApi(API_URLS.moveEmailsToBin);
+    const deleteEmail = () => {
+        moveEmailsToBin.call([email._id]);
+        window.history.back();
+    }
     return (
         <Box style={openDrawer ? { marginLeft: 250, width: '100%' } : { width: '100%' } }>
             <IconWrapper>
                 <ArrowBack fontSize='small' color="action" onClick={() => window.history.back() } />
-                <Delete fontSize='small' color="action" style={{ marginLeft: 40 }} />
+                <Delete fontSize='small' color="action" style={{ marginLeft: 40 }} onClick={() => deleteEmail()}/>
             </IconWrapper>
             <Subject>{email.subject} <Indicator component="span">Inbox</Indicator></Subject>
             <Box style={{ display: 'flex' }}>

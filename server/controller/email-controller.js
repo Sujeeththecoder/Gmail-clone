@@ -55,3 +55,14 @@ export const toggleStarredEmails = async (request, response) => {
     response.status(500).json(error.message);
   }
 }
+
+export const deleteEmails = async (request, response) => {
+  try
+  {
+  await Email.deleteMany ({id: { $in: request.body }});
+  return response.status (200).json ('emails deleted');
+  }catch (error) {
+  console.log(error);
+  response.status (500).json(error.message);
+  }
+}
